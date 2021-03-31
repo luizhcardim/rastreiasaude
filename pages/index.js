@@ -1,65 +1,104 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import React, { useState } from 'react'
+import dynamic from 'next/dynamic'
 
-export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+import MenuPrincipal from '../components/menuprincipal';
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+// import ChoroplethMap from '../components/choropleth_map';
+import FilterForm from '../components/filter_form';
+import Loading from '../components/loading';
+import DialogCityInformation from '../components/dialog_city_information';
+import axios from 'axios';
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+const ChoroplethMap = dynamic(() => import("../components/choropleth_map"), { ssr: false });
+//import { tileLayer } from 'leaflet';
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+export default function HomePage() {
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+    
 
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+
+    const [geojsonLayers, setgeojsonLayers] = useState()
+
+    const [loading, setloading] = useState(false)
+
+    const [dialogvisible, setdialogvisible] = useState(false)
+    const [dialogdata, setdialogdata] = useState(null)
+
+    const updateData = async (f) => {
+
+
+      console.log(f)
+
+        let layers
+        try {
+            setloading(true)
+
+            // layers = await clientgql.query({
+            //     query: gql`query q($disease: String, $visualization: String, $state: String, $date_start: String, $date_end: String){
+            //         geoGetTotalAndRating(disease:$disease,visualization:$visualization,state:$state, date_start: $date_start, date_end: $date_end)
+            //       }`,
+            //     variables: f
+            // })
+
+            const layers = await axios.get('/api/geogettotalandrating',{ params : {...f}})
+
+            setloading(false)
+
+            if(layers.data[0]['row_to_json']['features'] !== null){
+                setgeojsonLayers(layers.data[0]['row_to_json'])
+            }
+            
+
+                
+        } catch (e) {
+            setloading(false)
+            console.log(e)
+        }
+    }
+
+
+    const openCityDialog = (e) =>{
+        // Carregar notícias
+
+        // 
+        setdialogdata(e)
+        setdialogvisible(true)
+    }
+
+    const closeCityDialog = () =>{
+        setdialogvisible(false)
+    }
+
+
+
+
+    return (
+        <div>
+            <MenuPrincipal />
+            <div className="p-grid p-formgrid p-m-lg-5 p-m-2">
+
+                <div className="p-col-12 p-mb-2 p-lg-6 p-mb-lg-0">
+
+                    <FilterForm update={(f) => updateData(f)}></FilterForm>
+
+                </div>
+                <div className="p-col-12 p-lg-6">
+                    <h3>Mapa</h3>
+                    <div className="p-fluid">
+                        {loading ? <Loading></Loading> : <ChoroplethMap openCityDialog={openCityDialog} geojson_layers={geojsonLayers}></ChoroplethMap>}
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+            
+            <DialogCityInformation visible={dialogvisible} data={dialogdata} closeDialog={closeCityDialog}></DialogCityInformation>
+        </div>);
+
+
 }

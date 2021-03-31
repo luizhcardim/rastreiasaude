@@ -14,3 +14,19 @@ a {
 * {
   box-sizing: border-box;
 }
+
+
+.App {
+
+}
+
+
+/* Ajustes no Layout PrimeFaces */
+.p-menubar{
+  border: 0px !important
+}
+
+.p-menubar-start{
+  padding-right: 4vw;
+  padding-left: 2vw;
+}
