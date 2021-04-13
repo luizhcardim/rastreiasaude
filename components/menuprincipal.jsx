@@ -1,11 +1,14 @@
 import React from 'react';
 import { Menubar } from 'primereact/menubar';
 import { useRouter } from 'next/router'
+import { signIn, signOut, useSession } from 'next-auth/client';
+import { Button} from 'primereact/button'
 
 
 export default function MenuPrincipal(){
 
     const router = useRouter()
+    const [session,loading] = useSession()
 
     const items = [
         {
@@ -17,15 +20,30 @@ export default function MenuPrincipal(){
           command: () => { router.push("/sobre"); }
         },
         {
-          label: 'API',
-          command: () => { router.push("/api"); }
-        },
-        {
           label: 'Contato',
           command: () => { router.push("/contato"); }
-        }
+        },
+        session ? 
+        {
+          label: 'Administração',
+          items:[
+            {
+              label: 'Notícias Extraídas',
+              command: () => { router.push("/admin/extractednews"); }
+            },
+          ]
+        } : {}
       ];
 
-      return <Menubar model={items} start={<div><b>Rastreia</b> Saúde</div>} />
+      const right_toolbar = (
+        <div>
+          {!session ?
+          <Button label='Login' onClick={() =>signIn()} className="p-button-warning"></Button>:
+          <Button label='Logout' onClick={() => signOut()} className="p-button-warning"></Button>
+          }
+        </div>
+      )
+
+      return <Menubar model={items} start={<div><b>Rastreia</b> Saúde</div>} end={right_toolbar} />
 
 }

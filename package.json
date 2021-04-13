@@ -8,11 +8,14 @@
     "start": "next start"
   },
   "dependencies": {
+    "@types/next-auth": "^3.13.0",
     "axios": "^0.21.1",
+    "bcryptjs": "^2.4.3",
     "chart.js": "^2.9.4",
     "knex": "^0.95.4",
     "leaflet": "^1.7.1",
     "next": "10.1.2",
+    "next-auth": "^3.5.1",
     "pg": "^8.5.1",
     "primeflex": "^2.0.0",
     "primeicons": "^4.1.0",

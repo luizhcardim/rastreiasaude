@@ -10,7 +10,8 @@ export default function ComboDiseases({onDiseaseSelected}){
         {label: 'Nenhuma doença selecionada', value: 'any'},
         {label: 'Sars-COV-19', value: 'covid-19'},
         {label: 'Dengue', value: 'dengue'},
-        {label: 'Sarampo', value: 'sarampo'}
+        {label: 'Sarampo', value: 'sarampo'},
+        {label: 'Febre Amarela', value: 'febre amarela'}
     ];
 
     const onDiseaseChanged = (d) =>{

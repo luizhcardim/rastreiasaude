@@ -29,12 +29,7 @@ export default function ChoroplethMap({ geojson_layers, openCityDialog }) {
 
 function MapLayers({ geojson_layers ,openCityDialog }) {
 
-    // const map = useMapEvent('layeradd', () => {
-    //     console.log("Adicionou uma nova layer")
-    //     map.fitBounds(geojson_layers.getBounds())
-    //     //map.setCenter([50.5, 30.5])
-    //   })
-
+  
     const geojson = useRef(null);
 
     const map = useMap()
