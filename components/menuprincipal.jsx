@@ -8,9 +8,11 @@ import { Button} from 'primereact/button'
 export default function MenuPrincipal(){
 
     const router = useRouter()
-    const [session,loading] = useSession()
+    const [session] = useSession()
 
-    const items = [
+
+
+    let items = [
         {
           label: 'Home',
           command: () => { router.push("/"); }
@@ -29,7 +31,7 @@ export default function MenuPrincipal(){
           items:[
             {
               label: 'Notícias Extraídas',
-              command: () => { router.push("/admin/extractednews"); }
+              command: () => { router.push("/modules/admin/extractednews"); }
             },
           ]
         } : {}
@@ -44,6 +46,6 @@ export default function MenuPrincipal(){
         </div>
       )
 
-      return <Menubar model={items} start={<div><b>Rastreia</b> Saúde</div>} end={right_toolbar} />
+      return <Menubar model={session ? items : items} start={<div><b>Rastreia</b> Saúde</div>} end={right_toolbar} />
 
 }

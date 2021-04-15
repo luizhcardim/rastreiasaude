@@ -9,7 +9,7 @@ import IdentifiedDiseases from './identified_diseases';
 import { Dialog } from 'primereact/dialog';
 
 
-export default function FilterForm({ update }) {
+export default function FilterForm({ update , list_diseases }) {
 
     const [displayInformation, setDisplayInformation] = useState(false);
 
@@ -69,15 +69,15 @@ export default function FilterForm({ update }) {
                 <Button onClick={() => updateMap()} icon='pi pi-refresh' style={{ marginTop: '10px' }} label="Atualizar" />
             </div>
 
-            {selectedDisease === 'any' ?
-                <IdentifiedDiseases></IdentifiedDiseases> : null
+            {selectedDisease === 'any' && list_diseases ?
+                <IdentifiedDiseases list_diseases={list_diseases}></IdentifiedDiseases> : null
 
             }
 
             <Dialog header="Tipos de Visualizações" visible={displayInformation} onHide={() => setDisplayInformation(false)} baseZIndex={1000}>
                 
                 <ul>
-                    <li><b>Total</b> - Apresenta o númeto total de notícias identificado para cada município.</li>
+                    <li><b>Total</b> - Apresenta o número total de notícias identificado para cada município.</li>
                     <li><b>Rating</b> - Apresenta o número de notícias identificadas para cada 1000 habitantes.</li>
                     <li><b>Smoothed</b> - Apresenta uma média do rating de todos os municípios limítrofes.</li>
                 </ul>

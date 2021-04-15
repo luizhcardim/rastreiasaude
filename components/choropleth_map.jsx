@@ -34,7 +34,7 @@ function MapLayers({ geojson_layers ,openCityDialog }) {
 
     const map = useMap()
     useEffect(() => {
-        console.log('adicionou layer')
+        
         if (geojson_layers)
             //console.log(geojson.current.getBounds())
             map.fitBounds(geojson.current.getBounds())

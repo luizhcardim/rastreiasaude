@@ -11,7 +11,7 @@ export default function SobrePage(props) {
 
                 <div className="p-col">
                     <Panel header="Sobre">
-                        <p>Sobre o sistema Rastreia Saúde.</p>
+                        <p>Você pode entrar em contato com o desenvolvedor através do e-mail luizhcardim@gmail.com.</p>
                     </Panel>
                 </div>
 

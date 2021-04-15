@@ -14,6 +14,7 @@ export default function HomePage() {
     const [geojsonLayers, setgeojsonLayers] = useState()
     const [loading, setloading] = useState(false)
     const [filters, setfilters] = useState({})
+    const [listDiseases, setlistDiseases] = useState(null)
 
     const updateData = async (f) => {
 
@@ -22,6 +23,13 @@ export default function HomePage() {
             setloading(true)
             setfilters(f)
             const layers = await axios.get('/api/geogettotalandrating', { params: { ...f } })
+
+            // If not searching for a specific disease, get the list os totals for each disease
+            
+                const total_diseases = await axios.get('/api/getlistdiseases', { params: { state: f['state'], date_start: f['date_start'], date_end: f['date_end'] } })
+                console.log(f)
+                setlistDiseases(total_diseases.data)
+            
 
             setloading(false)
 
@@ -37,7 +45,8 @@ export default function HomePage() {
 
 
     const openCityDialog = (e) => {
-        cityDialogRef.current.openCityDialog(e,filters)
+
+        cityDialogRef.current.openCityDialog(e, filters)
     }
 
 
@@ -46,7 +55,7 @@ export default function HomePage() {
             <MenuPrincipal />
             <div className="p-grid p-formgrid p-m-lg-5 p-m-2">
                 <div className="p-col-12 p-mb-2 p-lg-6 p-mb-lg-0">
-                    <FilterForm update={(f) => updateData(f)}></FilterForm>
+                    <FilterForm list_diseases={listDiseases} update={(f) => updateData(f)}></FilterForm>
                 </div>
                 <div className="p-col-12 p-lg-6">
                     <h3>Mapa</h3>

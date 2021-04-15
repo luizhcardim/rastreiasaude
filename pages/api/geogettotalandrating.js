@@ -21,7 +21,7 @@ export default async (req, res) => {
                 (SELECT 
                 'Feature' As type, 
                 ST_AsGeoJSON(ST_Transform(geom, 4326),15,0)::json As geometry,
-                row_to_json((id ,nm_mun,t.total, t.rating, COUNT(*) OVER (), ROW_NUMBER () OVER (ORDER BY ${type_visualization}))) As properties
+                row_to_json((id ,nm_mun,t.total, t.rating, COUNT(*) OVER (), ROW_NUMBER () OVER (ORDER BY ${type_visualization}),sigla_uf)) As properties
                 FROM (SELECT m.id,
             m.nm_mun,
             m.sigla_uf,
@@ -42,10 +42,11 @@ export default async (req, res) => {
         ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM 
             ( SELECT 'Feature' As type, 
                ST_AsGeoJSON(ST_Transform(geom, 4326),15,0)::json As geometry,
-            row_to_json((id ,nm_mun,t.total, t.rating, COUNT(*) OVER (), ROW_NUMBER () OVER (ORDER BY rating) )) As properties FROM 
+            row_to_json((id ,nm_mun,t.total, t.rating, COUNT(*) OVER (), ROW_NUMBER () OVER (ORDER BY rating),sigla_uf )) As properties FROM 
                     (SELECT 
     m1.id,
     m1.nm_mun,
+    m1.sigla_uf,
     m1.geom,
     sum(n.total) / sum(m2.populacao)::numeric * 1000::numeric AS rating,
     sum(m2.populacao) AS populacao_vizinhos,

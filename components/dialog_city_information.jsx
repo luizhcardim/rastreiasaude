@@ -61,12 +61,11 @@ const DialogCityInformation = forwardRef((props,ref) => {
       setOpen(true)
 
       const dados_mapa = await axios.get('/api/getchartdata', { params: { idmun : data['f1'], disease: filters['disease'] } })
-      const dados_noticias = await axios.get('/api/getnewsdata', { params: { city : data['f2'], state: filters['state'] , disease: filters['disease'] } })
+      const dados_noticias = await axios.get('/api/getnewsdata', { params: { city : data['f2'], state: data['f7'] , disease: filters['disease'] } })
 
       setmapdata(dados_mapa.data)
       setnoticias(dados_noticias.data)
 
-      console.log(data)
 
     }
 
